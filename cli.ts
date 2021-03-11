@@ -30,8 +30,6 @@ async function main() {
 
   const { data: variables } = await gitlabApi.get<Variable[]>(`/api/v4/projects/${opts.project}/variables?per_page=1000`)
 
-  console.log(opts.environment)
-
   const newEnvVariables = variables.filter(variable => {
     if (variable.environment_scope == '*') {
       return true

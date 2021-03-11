@@ -1,6 +1,6 @@
 {
   "name": "export-gitlab-variables",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Fetch and export Gitlab variables for use by child process",
   "bin": {
     "export-gitlab-variables": "dist/cli.js"
@@ -8,6 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-run": "tsc && node ./dist/cli.js",
+    "build-publish": "tsc && npm publish",
     "tsc:watch": "tsc --watch"
   },
   "keywords": [
