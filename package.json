@@ -1,0 +1,29 @@
+{
+  "name": "export-gitlab-variables",
+  "version": "1.0.0",
+  "description": "Fetch and export Gitlab variables for use by child process",
+  "bin": {
+    "export-gitlab-variables": "dist/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-run": "tsc && node ./dist/cli.js",
+    "tsc:watch": "tsc --watch"
+  },
+  "keywords": [
+    "gitlab",
+    "variables",
+    "export",
+    "cicd"
+  ],
+  "author": "Piotr Mionskowski",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.2.3",
+    "@types/node": "^14.14.33"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "commander": "^7.1.0"
+  }
+}
