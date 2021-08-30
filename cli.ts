@@ -1,8 +1,30 @@
 #!/usr/bin/env node
 
-import axios from 'axios'
-import { Command } from 'commander';
-import { spawn } from 'child_process'
+import axios, {AxiosInstance} from 'axios'
+import {Command} from 'commander';
+import {spawn} from 'child_process'
+
+async function fetchAllGitlabVariables(gitlabApi: AxiosInstance, opts: { project: string }) {
+  const variables: Variable[] = [];
+  let page = 1;
+  do {
+    const {
+      data: currentPage
+    } = await gitlabApi.get<Variable[]>(`/api/v4/projects/${opts.project}/variables?per_page=100&page=${page}`)
+
+
+    const isLastPage = currentPage.length == 0;
+    if (isLastPage) {
+      break;
+    }
+
+    variables.push(...currentPage)
+
+    page += 1;
+
+  } while (true);
+  return variables;
+}
 
 async function main() {
   const program = new Command();
@@ -19,7 +41,12 @@ async function main() {
 
   program.parse()
 
-  const opts = program.opts();
+  const opts = program.opts() as {
+    project: string
+    url: string
+    environment: string
+    accessToken: string
+  };
 
   const gitlabApi = axios.create({
     baseURL: opts.url,
@@ -28,7 +55,7 @@ async function main() {
     }
   })
 
-  const { data: variables } = await gitlabApi.get<Variable[]>(`/api/v4/projects/${opts.project}/variables?per_page=1000`)
+  const variables = await fetchAllGitlabVariables(gitlabApi, opts);
 
   const newEnvVariables = variables.filter(variable => {
     const isDefault = variable.environment_scope == '*';
@@ -40,7 +67,7 @@ async function main() {
     }
     return opts.environment === variable.environment_scope
   })
-    .reduce((acc, cur) => ({ ...acc, [cur.key]: cur.value }), {})
+    .reduce((acc, cur) => ({...acc, [cur.key]: cur.value}), {})
 
   const combinedEnvs = {
     ...process.env,

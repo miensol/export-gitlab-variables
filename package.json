@@ -1,6 +1,6 @@
 {
   "name": "export-gitlab-variables",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Fetch and export Gitlab variables for use by child process",
   "bin": {
     "export-gitlab-variables": "dist/cli.js"
